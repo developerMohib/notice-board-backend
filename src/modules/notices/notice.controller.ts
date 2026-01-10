@@ -7,7 +7,7 @@ import {
   updateNotice,
 } from './notice.service';
 
-export const create = async (req: Request, res: Response) => {
+export const createController = async (req: Request, res: Response) => {
   const details = req.body;
   const result = await createNotice(details);
   res.status(201).json({
@@ -16,7 +16,7 @@ export const create = async (req: Request, res: Response) => {
   });
 };
 
-export const getAll = async (_req: Request, res: Response) => {
+export const getAllController = async (_req: Request, res: Response) => {
   const result = await getAllNotices();
   res.status(200).json({
     success: true,
@@ -24,21 +24,21 @@ export const getAll = async (_req: Request, res: Response) => {
   });
 };
 
-export const getOne = async (req: Request, res: Response) => {
+export const getOneController = async (req: Request, res: Response) => {
   const id = req.params.id as string;
   const result = await getSingleNotice(id);
   res.status(200).json({ success: true, data: result });
 };
 
-export const update = async (req: Request, res: Response) => {
+export const updateController = async (req: Request, res: Response) => {
   const id = req.params.id as string;
   const details = req.body;
   const result = await updateNotice(id, details);
   res.status(200).json({ success: true, data: result });
 };
 
-export const remove = async (req: Request, res: Response) => {
+export const removeController = async (req: Request, res: Response) => {
   const id = req.params.id as string;
   await deleteNotice(id);
-  res.status(200).json({ success: true, message: 'Deleted' });
+  res.status(200).json({ success: true, message: 'Deleted Notice' });
 };

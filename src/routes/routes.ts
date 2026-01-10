@@ -1,6 +1,14 @@
 import { Router } from 'express';
-import { healthController } from '../controllers/health.controller';
+import { noticeRouter } from '../modules/notices/notice.route';
 
 const router = Router();
-router.get('/health',healthController);
-export default router;
+const modules_Routes = [
+  {
+    path: '/notice',
+    route: noticeRouter,
+  },
+];
+
+modules_Routes.forEach((route) => router.use(route.path, route.route));
+
+export { router };

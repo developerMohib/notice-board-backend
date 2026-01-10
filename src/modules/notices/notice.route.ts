@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { create, getAll, getOne, remove, update } from './notice.controller';
+import { createController, getAllController, getOneController, removeController, updateController,  } from './notice.controller';
 
 const router = Router();
 
-router.post('/create', create);
-router.get('/get-all', getAll);
-router.get('/details/:id', getOne);
-router.patch('/update/:id', update);
-router.delete('/delete/:id', remove);
+router.post('/create', createController);
+router.get('/get-all', getAllController);
+router.get('/details/:id', getOneController);
+router.patch('/update/:id', updateController);
+router.delete('/delete/:id', removeController);
 
 export const noticeRouter = router;
