@@ -11,7 +11,7 @@ A backend service for a notice board application built with modern web technolog
 
 ### Installation
 ```bash
-git clone <repository-url>
+git clone <https://github.com/developerMohib/notice-board-backend.git>
 cd notice-board/backend
 npm install
 ```
@@ -37,10 +37,13 @@ backend/
 ```
 
 ## API Endpoints
-- `GET /api/notices` - Retrieve all notices
-- `POST /api/notices` - Create a new notice
-- `PUT /api/notices/:id` - Update a notice
-- `DELETE /api/notices/:id` - Delete a notice
+
+- `POST /api/notice/get-all` - Retrieve all notices
+- `GET /api/notice/create` - Create a new notice
+- `GET /api/notice/details/:id` - Find a notice
+- `PATCH /api/notice/update/:id` - Update a notice
+- `DELETE /api/notice/delete/:id` - Delete a notice
+
 
 ## Environment Variables
 Create a `.env` file based on `.env.example` with your configuration.
@@ -49,9 +52,7 @@ Create a `.env` file based on `.env.example` with your configuration.
 ```bash
 npm test
 ```
-
-## Contributing
-Please follow the coding standards and submit pull requests for review.
-
-## License
-MIT
+## Run
+```bash
+npm run dev
+```
