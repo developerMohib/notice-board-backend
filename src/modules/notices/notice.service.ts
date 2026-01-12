@@ -6,21 +6,25 @@ export const createNotice = async (payload: any) => {
   return Notice.create(payload);
 };
 
-export const getAllNotices = async (page: number, limit: number) => {
-  await connectDB();
-  
-  const skip = (page - 1) * limit;
-  // return Notice.find().sort({ createdAt: -1 });
-    const [notices, total] = await Promise.all([
-    Notice.find()
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .lean(),
-    Notice.countDocuments(),
-  ]);
+// export const getAllNotices = async (page: number, limit: number) => {
+//   await connectDB();
 
-  return { notices, total };
+//   const skip = (page - 1) * limit;
+//   // return Notice.find().sort({ createdAt: -1 });
+//     const [notices, total] = await Promise.all([
+//     Notice.find()
+//       .sort({ createdAt: -1 })
+//       .skip(skip)
+//       .limit(limit)
+//       .lean(),
+//     Notice.countDocuments(),
+//   ]);
+
+//   return { notices, total };
+// };
+export const getAllNotices = async () => {
+  await connectDB();
+  return Notice.find().sort({ createdAt: -1 });
 };
 
 export const getSingleNotice = async (id: string) => {
@@ -37,3 +41,12 @@ export const deleteNotice = async (id: string) => {
   await connectDB();
   return Notice.findByIdAndDelete(id);
 };
+
+export const getNoticesByStatus = async (status: string) => {
+  return await Notice.find({ status }).sort({ createdAt: -1 });
+};
+
+// Specific exports (optional but clean)
+export const getPublishedNotices = () => getNoticesByStatus('published');
+export const getDraftNotices = () => getNoticesByStatus('draft');
+export const getUnpublishedNotices = () => getNoticesByStatus('unpublished');
