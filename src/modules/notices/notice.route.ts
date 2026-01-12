@@ -5,7 +5,7 @@ const router = Router();
 
 router.post('/create', createController);
 router.get('/get-all', getAllController);
-router.get('/details/:id', getOneController);
+router.get('/get-single/:id', getOneController);
 router.patch('/update/:id', updateController);
 router.patch('/toggle-status/:id', updateController);
 router.delete('/delete/:id', removeController);
