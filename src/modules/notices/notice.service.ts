@@ -6,9 +6,21 @@ export const createNotice = async (payload: any) => {
   return Notice.create(payload);
 };
 
-export const getAllNotices = async () => {
+export const getAllNotices = async (page: number, limit: number) => {
   await connectDB();
-  return Notice.find().sort({ createdAt: -1 });
+  
+  const skip = (page - 1) * limit;
+  // return Notice.find().sort({ createdAt: -1 });
+    const [notices, total] = await Promise.all([
+    Notice.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean(),
+    Notice.countDocuments(),
+  ]);
+
+  return { notices, total };
 };
 
 export const getSingleNotice = async (id: string) => {

@@ -1,7 +1,6 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { globalErrorHandler } from './utils/global.err.handler';
-import { noticeRouter } from './modules/notices/notice.route';
 import { router } from './routes/routes';
 
 const app = express();
