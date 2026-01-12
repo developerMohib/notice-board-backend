@@ -19,13 +19,13 @@ const noticeSchema = new Schema(
     department: {
       type: String,
       enum: [
+        'all',
         'individual',
-        'all department',
         'finance',
         'hr',
-        'sales team',
-        'web team',
-        'database team',
+        'sales',
+        'web',
+        'database',
         'admin',
       ],
       required: true,
