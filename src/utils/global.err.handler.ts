@@ -15,8 +15,6 @@ const globalErrorHandler = (
   if (err.name === "ValidationError") {
     statusCode = 400;
     message = "Validation Error";
-
-    // Extract errors into an array
     errors = Object.values(err.errors).map((error: any) => ({
       field: error.path,
       message: error.message,

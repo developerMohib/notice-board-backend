@@ -50,5 +50,8 @@ const noticeSchema = new Schema(
   },
   { timestamps: true },
 );
-
+// In your Mongoose schema
+noticeSchema.index({ status: 1 });
+noticeSchema.index({ department: 1 });
+noticeSchema.index({ title: 'text', description: 'text' });
 export const Notice = model('Notice', noticeSchema);

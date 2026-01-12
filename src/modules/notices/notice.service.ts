@@ -6,22 +6,28 @@ export const createNotice = async (payload: any) => {
   return Notice.create(payload);
 };
 
-// export const getAllNotices = async (page: number, limit: number) => {
-//   await connectDB();
+export const getAllNoticesPage = async (
+  page: number,
+  limit: number,
+  filter: any = {}
+) => {
+  await connectDB();
 
-//   const skip = (page - 1) * limit;
-//   // return Notice.find().sort({ createdAt: -1 });
-//     const [notices, total] = await Promise.all([
-//     Notice.find()
-//       .sort({ createdAt: -1 })
-//       .skip(skip)
-//       .limit(limit)
-//       .lean(),
-//     Notice.countDocuments(),
-//   ]);
+  const skip = (page - 1) * limit;
 
-//   return { notices, total };
-// };
+  const [notices, total] = await Promise.all([
+    Notice.find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean(),
+    Notice.countDocuments(filter),
+  ]);
+
+  return { notices, total };
+};
+
+
 export const getAllNotices = async () => {
   await connectDB();
   return Notice.find().sort({ createdAt: -1 });
