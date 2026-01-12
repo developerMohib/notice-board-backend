@@ -3,7 +3,6 @@ import {
   createNotice,
   deleteNotice,
   getAllNotices,
-  getAllNoticesPage,
   getSingleNotice,
   updateNotice,
 } from './notice.service';
@@ -17,43 +16,42 @@ export const createController = async (req: Request, res: Response) => {
   });
 };
 
-export const getAllControllerPage = async (req: Request, res: Response) => {
+export const getAllController = async (req: Request, res: Response) => {
   try {
     const page = Math.max(1, Number(req.query.page) || 1);
     const limit = Math.min(100, Math.max(1, Number(req.query.limit) || 5));
     const { status, department, search } = req.query;
     const filter: any = {};
-    console.log(
-      'page:',
-      page,
-      'limit:',
-      limit,
-      'status:',
-      status,
-      'department:',
-      department,
-      'search:',
-      search,
-    );
+
+    const cleanString = (val: any): string | null => {
+      if (typeof val !== 'string') return null;
+      if (val === 'undefined' || val === '') return null;
+      return val;
+    };
+
+    const statusClean = cleanString(status);
+    const departmentClean = cleanString(department);
+    const searchClean = cleanString(search);
+
     if (
-      status &&
-      ['published', 'draft', 'unpublished'].includes(status as string)
+      statusClean &&
+      ['published', 'draft', 'unpublished'].includes(statusClean)
     ) {
-      filter.status = status;
+      filter.status = statusClean;
     }
 
-    if (department && typeof department === 'string') {
-      filter.department = department;
+    if (departmentClean) {
+      filter.department = departmentClean;
     }
 
-    if (search && typeof search === 'string') {
+    if (searchClean) {
       filter.$or = [
-        { title: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } },
+        { title: { $regex: searchClean, $options: 'i' } },
+        { description: { $regex: searchClean, $options: '.i' } },
       ];
     }
 
-    const { notices, total } = await getAllNoticesPage(page, limit, filter);
+    const { notices, total } = await getAllNotices(page, limit, filter);
 
     return res.status(200).json({
       success: true,
@@ -74,11 +72,6 @@ export const getAllControllerPage = async (req: Request, res: Response) => {
       error: error.message || 'Failed to fetch notices',
     });
   }
-};
-
-export const getAllController = async (req: Request, res: Response) => {
-  const result = await getAllNotices();
-  res.status(200).json({ success: true, data: result });
 };
 
 export const getOneController = async (req: Request, res: Response) => {

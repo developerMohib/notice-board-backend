@@ -6,7 +6,7 @@ export const createNotice = async (payload: any) => {
   return Notice.create(payload);
 };
 
-export const getAllNoticesPage = async (
+export const getAllNotices = async (
   page: number,
   limit: number,
   filter: any = {}
@@ -25,12 +25,6 @@ export const getAllNoticesPage = async (
   ]);
 
   return { notices, total };
-};
-
-
-export const getAllNotices = async () => {
-  await connectDB();
-  return Notice.find().sort({ createdAt: -1 });
 };
 
 export const getSingleNotice = async (id: string) => {
