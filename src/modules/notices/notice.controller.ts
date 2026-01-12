@@ -14,6 +14,7 @@ export const createController = async (req: Request, res: Response) => {
     success: true,
     data: result,
   });
+  console.log(details);
 };
 
 // export const getAllController = async (req: Request, res: Response) => {
