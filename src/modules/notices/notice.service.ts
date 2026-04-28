@@ -30,7 +30,8 @@ export const getAllNotices = async (
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(validLimit)
-        .lean() as Promise<INotice[]>,
+        .lean()
+  .exec() as Promise<INotice[]>,
       Notice.countDocuments(mongoFilter),
     ]);
  
