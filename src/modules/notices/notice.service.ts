@@ -1,30 +1,44 @@
 import { connectDB } from '../../db/db';
-import { Notice } from './notice.model';
-
+import { INotice, Notice } from './notice.model';
+interface NoticeFilter extends Partial<INotice> {
+  $or?: Array<{ [key: string]: any }>;
+  [key: string]: any;
+}
 export const createNotice = async (payload: any) => {
   await connectDB();
   return Notice.create(payload);
 };
 
+
 export const getAllNotices = async (
-  page: number,
-  limit: number,
-  filter: Record<string, any> = {}
+  page: number = 1,
+  limit: number = 10,
+  filter: NoticeFilter = {}
 ) => {
-  await connectDB();
-
-  const skip = (page - 1) * limit;
-
-  const [notices, total] = await Promise.all([
-    Notice.find(filter as  any)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .lean(),
-    Notice.countDocuments(filter),
-  ]);
-
-  return { notices, total };
+  try {
+    await connectDB();
+ 
+    const validPage = Math.max(1, page);
+    const validLimit = Math.min(100, Math.max(1, limit));
+    const skip = (validPage - 1) * validLimit;
+ 
+    // ✅ Simple typing - no FilterQuery needed
+    const mongoFilter = filter as any;
+ 
+    const [notices, total] = await Promise.all([
+      Notice.find(mongoFilter)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(validLimit)
+        .lean() as Promise<INotice[]>,
+      Notice.countDocuments(mongoFilter),
+    ]);
+ 
+    return { notices, total };
+  } catch (error: any) {
+    console.error('Error fetching notices:', error);
+    throw new Error(`Failed to fetch notices: ${error.message}`);
+  }
 };
 
 export const getSingleNotice = async (id: string) => {

@@ -1,6 +1,43 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 
-const noticeSchema = new Schema(
+// ✅ Define TypeScript Interface
+export interface IAttachment {
+  filename?: string;
+  originalName?: string;
+  size?: number;
+  mimetype?: string;
+  path?: string;
+}
+
+export interface INotice extends Document {
+  title: string;
+  description: string;
+  noticeType:
+    | 'Warning Desiplaine'
+    | 'Appreciation & Recognition'
+    | 'Attendance Leave Issue'
+    | 'Pay Roll Compensation'
+    | 'Contract Role Update'
+    | 'Advisory Personal Reminder';
+  department:
+    | 'all'
+    | 'individual'
+    | 'finance'
+    | 'hr'
+    | 'sales'
+    | 'web'
+    | 'database'
+    | 'admin';
+  attachments?: IAttachment[];
+  employeeId?: string;
+  employeeName?: string;
+  position?: string;
+  status: 'published' | 'unpublished' | 'draft';
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const noticeSchema = new Schema<INotice>(
   {
     title: { type: String, required: true, trim: true },
     description: { type: String, required: true },
@@ -48,10 +85,16 @@ const noticeSchema = new Schema(
       default: 'draft',
     },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
-// In your Mongoose schema
+
+// ✅ Add indexes for performance
 noticeSchema.index({ status: 1 });
 noticeSchema.index({ department: 1 });
 noticeSchema.index({ title: 'text', description: 'text' });
-export const Notice = model('Notice', noticeSchema);
+noticeSchema.index({ status: 1, department: 1 }); // Compound index
+
+// ✅ Export model with proper typing
+export const Notice = model<INotice>('Notice', noticeSchema);
+
+export default Notice;
