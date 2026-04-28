@@ -8,12 +8,22 @@ import {
 } from './notice.service';
 
 export const createController = async (req: Request, res: Response) => {
-  const details = req.body;
-  const result = await createNotice(details);
-  res.status(201).json({
-    success: true,
-    data: result,
-  });
+try {
+    const details = req.body;
+    if (!details || Object.keys(details).length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: 'Request body cannot be empty',
+      });
+    }
+    const result = await createNotice(details);
+    res.status(201).json({ success: true, data: result });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Failed to create notice',
+    });
+  }
 };
 
 export const getAllController = async (req: Request, res: Response) => {
@@ -47,7 +57,7 @@ export const getAllController = async (req: Request, res: Response) => {
     if (searchClean) {
       filter.$or = [
         { title: { $regex: searchClean, $options: 'i' } },
-        { description: { $regex: searchClean, $options: '.i' } },
+        { description: { $regex: searchClean, $options: 'i' } },
       ];
     }
 
