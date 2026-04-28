@@ -16,7 +16,7 @@ export const getAllNotices = async (
   const skip = (page - 1) * limit;
 
   const [notices, total] = await Promise.all([
-    Notice.find(filter as Record<string, any>)
+    Notice.find(filter as  any)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
