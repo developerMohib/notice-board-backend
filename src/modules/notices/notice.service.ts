@@ -9,14 +9,14 @@ export const createNotice = async (payload: any) => {
 export const getAllNotices = async (
   page: number,
   limit: number,
-  filter: any = {}
+  filter: Record<string, any> = {}
 ) => {
   await connectDB();
 
   const skip = (page - 1) * limit;
 
   const [notices, total] = await Promise.all([
-    Notice.find(filter)
+    Notice.find(filter as Record<string, any>)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
