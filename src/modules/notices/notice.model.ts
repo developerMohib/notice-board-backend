@@ -88,12 +88,6 @@ const noticeSchema = new Schema<INotice>(
   { timestamps: true }
 );
 
-// ✅ Add indexes for performance
-noticeSchema.index({ status: 1 });
-noticeSchema.index({ department: 1 });
-noticeSchema.index({ title: 'text', description: 'text' });
-noticeSchema.index({ status: 1, department: 1 }); // Compound index
-
 // ✅ Export model with proper typing
 export const Notice = model<INotice>('Notice', noticeSchema);
 

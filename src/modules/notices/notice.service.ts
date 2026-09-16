@@ -1,8 +1,7 @@
-import { connectDB } from '../../db/db';
 import { INotice, Notice } from './notice.model';
 
 export const createNotice = async (payload: any) => {
-  await connectDB();
+  // await connectDB();
   return Notice.create(payload);
 };
 
@@ -17,12 +16,10 @@ export const getAllNotices = async (
   filter: NoticeFilter = {}
 ) => {
   try {
-    await connectDB();
-
     const validPage = Math.max(1, page);
     const validLimit = Math.min(100, Math.max(1, limit));
     const skip = (validPage - 1) * validLimit;
- const mongoFilter: FilterQuery<INotice> = {};
+ const mongoFilter: Partial<INotice> = {};
 
     if (filter.status) {
       mongoFilter.status = filter.status;
@@ -50,17 +47,17 @@ export const getAllNotices = async (
 };
 
 export const getSingleNotice = async (id: string) => {
-  await connectDB();
+  // await connectDB();
   return Notice.findById(id);
 };
 
 export const updateNotice = async (id: string, payload: any) => {
-  await connectDB();
+  // await connectDB();
   return Notice.findByIdAndUpdate(id, payload, { new: true });
 };
 
 export const deleteNotice = async (id: string) => {
-  await connectDB();
+  // await connectDB();
   return Notice.findByIdAndDelete(id);
 };
 
