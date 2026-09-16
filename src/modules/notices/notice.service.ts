@@ -22,8 +22,15 @@ export const getAllNotices = async (
     const validPage = Math.max(1, page);
     const validLimit = Math.min(100, Math.max(1, limit));
     const skip = (validPage - 1) * validLimit;
+ const mongoFilter: FilterQuery<INotice> = {};
 
-    const mongoFilter = filter as Record<string, unknown>;
+    if (filter.status) {
+      mongoFilter.status = filter.status;
+    }
+
+    if (filter.noticeType) {
+      mongoFilter.noticeType = filter.noticeType;
+    }
 
     const [notices, total] = await Promise.all([
       Notice.find(mongoFilter)
